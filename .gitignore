@@ -1,4 +1,9 @@
 *.py[cod]
+# vi/vim idiots
+*.swp
+
+*.dbl
+*.sav
 
 # C extensions
 *.so

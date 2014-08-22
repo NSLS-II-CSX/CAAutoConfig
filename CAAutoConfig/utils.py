@@ -20,20 +20,18 @@ def getCfPVlist(rootPath, pattern):
   
   return pvlist
 
-def applyRegexToList(list, regex):
+def applyRegexToList(list, regex, separator=' '):
   """Apply a list of regex to list and return result"""
-  print type(regex), type(regex) == list
   if type(regex) != type(list):
     regex = [regex]
-
-  print regex
 
   regexList = [re.compile(r) for r in regex]
 
   for r in regexList:
     list = [l for l in list if r.match(l)]
 
-  return list
+  list = [l.split(separator) for l in list]
+  return [i[0] for i in list]
    
 
 if __name__ == "__main__":

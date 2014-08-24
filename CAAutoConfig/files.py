@@ -14,6 +14,7 @@ class CAFile:
     self._root = self._tree.getroot()
     self._groups = self._root.findall('group')
 
+# FIXME: combine findGroup with createGroup
   def findGroup(self, name):
     """Return an XML element for group name"""
     for g in self._groups:
@@ -26,6 +27,16 @@ class CAFile:
     n = ET.SubElement(g, 'name')
     n.text = name.strip()
     return CAGroup(g)
+
+  def createGroup(self, name):
+    """Create a Group node in the XML tree"""
+    new_group = ET.SubElement(self._root,'group')
+    group_name = ET.SubElement(new_group, 'name')
+    group_name.text = name
+    # update the document's groups
+    self._groups = self._root.findall('group') 
+    print 'Creating group, \'%s\'' % name
+    return CAGroup(new_group)
 
   def writeFile(self, filename):
     """Write formatted XML to disk"""

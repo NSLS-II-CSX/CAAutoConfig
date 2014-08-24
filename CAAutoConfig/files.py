@@ -19,7 +19,13 @@ class CAFile:
     for g in self._groups:
       if g.find('name').text.strip() == name:
         return CAGroup(g)
-    return None
+    
+    # If we are here the group does not exist
+
+    g = ET.SubElement(self._root, 'group')
+    n = ET.SubElement(g, 'name')
+    n.text = name.strip()
+    return CAGroup(g)
 
   def writeFile(self, filename):
     """Write formatted XML to disk"""
@@ -65,11 +71,13 @@ class CAGroup:
       if monitor:
         ET.SubElement(channelElement, 'monitor')
 
+      print "++++ Added PV ", pv
+
       return True
 
     else:
 
-      print "Skipped PV ", pv
+      #print "**** Skipped PV ", pv
       return False
 
 if __name__ == "__main__":

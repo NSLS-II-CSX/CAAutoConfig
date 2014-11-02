@@ -7,6 +7,6 @@ setup(name='CAAutoConfig',
       description='Python Utilities to autogenerate archiver file',
       author='Stuart Wilkins',
       author_email='swilkins@bnl.gov',
-      packages=['CAAutoConfig']
-      scripts=['scripts/make-engine-cfg.py']
+      packages=['CAAutoConfig'],
+      scripts=['scripts/make-engine-cfg']
      )

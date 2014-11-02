@@ -68,7 +68,7 @@ class CAGroup:
     """Check if a PV by name is in the group"""
     return pv.strip() in self._pvlist    
 
-  def addPV(self, pv, period = 1, monitor = True):
+  def addPV(self, pv, period = 0.05, monitor = True):
     if not pv.strip() in self._pvlist: 
 
       channelElement = ET.SubElement(self._group, 'channel')

@@ -8,4 +8,5 @@ setup(name='CAAutoConfig',
       author='Stuart Wilkins',
       author_email='swilkins@bnl.gov',
       packages=['CAAutoConfig']
+      scripts=['scripts/make-engine-cfg.py']
      )

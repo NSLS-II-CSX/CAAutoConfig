@@ -20,7 +20,7 @@ def getCfPVlist(rootPath, pattern):
   
   return pvlist
 
-def applyRegexToList(list, regex, separator=' '):
+def applyRegexToList(list, regex, separator=' ', expandList = None):
   """Apply a list of regex to list and return result"""
   if type(regex) != type(list):
     regex = [regex]
@@ -31,10 +31,18 @@ def applyRegexToList(list, regex, separator=' '):
     list = [l for l in list if r.match(l)]
 
   list = [l.split(separator) for l in list]
-  return [i[0] for i in list]
-   
+  list = [i[0] for i in list]
+  
+  if expandList:
+    expandRegexList = [re.compile(r) for r in expandList[0]]
+    for r,postfix in zip(expandRegexList, expandList[1]):
+      expandMatches = [l for l in list if r.match(l)]
+      for e in expandMatches:
+        list = list + [(e + p) for p in postfix]
+  return list
 
 if __name__ == "__main__":
-  list = getCfPVlist('/cf-update', 'xf23id*.dbl')
-  print applyRegexToList(list, ['^XF:23ID(A|1|2)-VA', '.*(?<!_)$'])
+  list = getCfPVlist('/cf-update', 'xf23ida-ioc1.mc05.dbl')
+  for a in applyRegexToList(list, ['^XF:23IDA-BI:1', '.*(?<!_)$'], expandList = [['.*Mtr$'],[['.RBV','.OFF']]]):
+    print a
 

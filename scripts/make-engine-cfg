@@ -24,6 +24,7 @@ parser.add_argument('-d', '--destination', action='store', help=dest_help)
 parser.add_argument('-r', '--regex', nargs="*", action='store', required=True, help=regex_help)
 parser.add_argument('-m', '--monitor', action='store', default=True, help='Defaults to true')
 parser.add_argument('-p', '--period', action='store', default=1.0, help='Defaults to 1 second')
+parser.add_argument('-e', '--expand', action='store_true', default=False, help='Add postfixes')
 
 engine_xml = 'engine.xml'
 engine_preamble = '\
@@ -37,6 +38,14 @@ engine_preamble = '\
         <max_repeat_count>120</max_repeat_count>\n\
 \n\
 </engineconfig>\n'
+
+expand_postfix = [['.*Mtr$'], [['.RBV' , '.DVAL', '.DIR' , '.DHLM', '.DLLM', '.TWV',
+                                '.SREV', '.MRES', '.ERES', '.RRES', '.VBAS', '.VELO',
+                                '.VMAX', '.ACCL', '.BDST', '.BVEL', '.BACC', '.RDBD',
+                                '.DESC', '.EGU' , '.RTRY', '.UEIP', '.URIP', '.DLY',
+                                '.RDBL', '.PREC', '.DISA', '.DISP', '.FOFF', '.OFF',
+                                '.FRAC', '.OMSL', '.JVEL', '.JAR',  '.PCOF', '.ICOF',
+                                '.DCOF', '.HVEL', '.NTM',  '.NTMF']]]
 
 def chk_engine_file(rootpath):
     outfile = path.join(rootpath, engine_xml) 
@@ -78,7 +87,11 @@ def make_engine_config(args=None):
     group = cafile.findGroup(args.group)
     if group is None:
         group = cafile.createGroup(args.group)
-    [group.addPV(pv) for pv in utils.applyRegexToList(pvlist, args.regex)]
+    if args.expand:
+      l = expand_postfix
+    else:
+      l = None
+    [group.addPV(pv) for pv in utils.applyRegexToList(pvlist, args.regex, expandList = l)]
 
     cafile.writeFile(outfile)        
 
